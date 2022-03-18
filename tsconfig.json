@@ -11,6 +11,12 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
+    "paths": {
+      "ngx-cmdev-barcode": [
+        "dist/ngx-cmdev-barcode/ngx-cmdev-barcode",
+        "dist/ngx-cmdev-barcode"
+      ]
+    },
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
