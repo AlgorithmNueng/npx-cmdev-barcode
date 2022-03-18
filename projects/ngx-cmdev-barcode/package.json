@@ -1,11 +1,25 @@
 {
   "name": "ngx-cmdev-barcode",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "peerDependencies": {
     "@angular/common": "^13.2.0",
     "@angular/core": "^13.2.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlgorithmNueng/npx-cmdev-barcode"
+  },
+  "author": {
+    "name": "Satit Rakkhaphan",
+    "email": "mynung.comsci@gmail.com"
+  },
+  "keywords": [
+    "angular",
+    "barcode",
+    "jsbarcode"
+  ],
+  "license": "MIT"
 }

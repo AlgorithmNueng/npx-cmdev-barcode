@@ -1,12 +1,13 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   Input,
   OnChanges,
-  SimpleChanges,
+  Renderer2,
   ViewChild,
 } from '@angular/core';
-import * as JsBarcode from 'jsbarcode';
+import JsBarcode from 'jsbarcode';
 
 type BarcodeType =
   | 'CODE128'
@@ -33,7 +34,7 @@ type BarcodeType =
   template: ` <div #bcElement [class]="cssClass"></div> `,
   styles: [],
 })
-export class NgxCmdevBarcodeComponent implements OnChanges {
+export class NgxCmdevBarcodeComponent implements AfterViewInit, OnChanges {
   @ViewChild('bcElement') bcElement?: ElementRef;
   @Input('bc-element-type') elementType: 'svg' | 'img' | 'canvas' = 'svg';
   @Input('bc-class') cssClass = 'barcode'; // this should be done more elegantly
@@ -56,6 +57,8 @@ export class NgxCmdevBarcodeComponent implements OnChanges {
   @Input('bc-margin-left') marginLeft?: number;
   @Input('bc-margin-right') marginRight?: number;
   @Input('bc-valid') valid: () => boolean = () => true;
+
+  constructor(private renderer: Renderer2) {}
 
   get options() {
     return {
@@ -84,9 +87,31 @@ export class NgxCmdevBarcodeComponent implements OnChanges {
     this.generateBarcode();
   }
 
+  ngAfterViewInit(): void {
+    this.generateBarcode();
+  }
+
   generateBarcode() {
     if (!this.bcElement || !this.value) return;
 
-    JsBarcode(this.bcElement, this.value, this.options);
+    let element: Element;
+    switch (this.elementType) {
+      case 'img':
+        element = this.renderer.createElement('img');
+        break;
+      case 'canvas':
+        element = this.renderer.createElement('canvas');
+        break;
+      case 'svg':
+      default:
+        element = this.renderer.createElement('svg', 'svg');
+    }
+
+    JsBarcode(element, this.value, this.options);
+
+    for (let node of this.bcElement.nativeElement.childNodes) {
+      this.renderer.removeChild(this.bcElement.nativeElement, node);
+    }
+    this.renderer.appendChild(this.bcElement.nativeElement, element);
   }
 }
